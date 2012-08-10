@@ -12,9 +12,9 @@
                    processClojureRender [javax.portlet.RenderRequest javax.portlet.RenderResponse] void]])
 
 (defn -processClojureAction [portlet request response]
-  (set-render-parameter response "message" "An action occurred"))
+  (set-render-parameters response {:message "An action occurred"}))
 
 (defn -processClojureRender [portlet request response]
-  (set-render-attribute request "message"
-    (or (get-request-paramater request "message") "Nothing happened"))
-  (dispatch portlet "/view.jsp" request response))
+  (let [param (first (:message (get-request-parameters request)))
+        message (or param "Nothing happened")]
+    (dispatch portlet "/view.jsp" {:message message} request response)))
