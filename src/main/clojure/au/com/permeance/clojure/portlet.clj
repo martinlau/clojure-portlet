@@ -24,3 +24,31 @@
 (defn set-render-parameters [response parameters]
   (do-with-map #(. response setRenderParameter %1 %2) parameters))
 
+(defn action-method [f]
+  (let [name (str (:name (meta f)))
+        action (str (:action (meta f)))]
+    `[~(with-meta
+         (symbol name)
+         `{javax.portlet.ProcessAction {:name ~action}})
+      [javax.portlet.ActionRequest javax.portlet.ActionResponse]
+      ~'void]))
+
+(defn render-method [f]
+  (let [name (str (:name (meta f)))
+        render (str (:render (meta f)))]
+    `[~(with-meta
+         (symbol name)
+         `{javax.portlet.RenderMode {:name ~render}})
+      [javax.portlet.RenderRequest javax.portlet.RenderResponse]
+      ~'void]))
+
+(defmacro gen-portlet-class [name]
+  (let [publics# (vals (ns-publics *ns*))
+        render-methods# (map render-method (filter #(:render (meta %)) publics#))
+        action-methods# (map action-method (filter #(:action (meta %)) publics#))]
+    `(gen-class
+       :extends javax.portlet.GenericPortlet
+                :main false
+                :methods [~@render-methods# ~@action-methods#]
+                :name ~name
+                :prefix "")))
