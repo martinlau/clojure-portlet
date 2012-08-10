@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+             version="2.0">
+
+    <portlet>
+        <portlet-name>clojure-portlet</portlet-name>
+        <display-name>clojure-portlet</display-name>
+        <portlet-class>au.com.permeance.clojure.ClojurePortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <portlet-info>
+            <title>clojure-portlet</title>
+            <short-title>clojure-portlet</short-title>
+        </portlet-info>
+    </portlet>
+
+</portlet-app>
