@@ -1,4 +1,5 @@
-(ns au.com.permeance.clojure.clojure-portlet)
+(ns au.com.permeance.clojure.clojure-portlet
+  (:use au.com.permeance.clojure.portlet))
 
 (gen-class
   :name au.com.permeance.clojure.ClojurePortlet
@@ -11,11 +12,9 @@
                    processClojureRender [javax.portlet.RenderRequest javax.portlet.RenderResponse] void]])
 
 (defn -processClojureAction [portlet request response]
-  (. response setRenderParameter "message" "An action occurred"))
+  (set-render-parameter response "message" "An action occurred"))
 
 (defn -processClojureRender [portlet request response]
-  (let [message (or (. request getParameter "message") "Nothing happened")]
-    (. request setAttribute "message" message))
-  (let [context (. portlet getPortletContext)
-        dispatcher (. context getRequestDispatcher "/view.jsp")]
-    (. dispatcher include request response)))
+  (set-render-attribute request "message"
+    (or (get-request-paramater request "message") "Nothing happened"))
+  (dispatch portlet "/view.jsp" request response))
